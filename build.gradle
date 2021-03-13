@@ -1,14 +1,39 @@
-plugins {
-    id 'java'
+buildscript {
+    ext { // ext 는 변수를 설정하는 곳 아래 springBootVersion 이란 변수를 만들었고 2.1.7.RELEASE 문자열을 담음
+        springBootVersion = '2.1.7.RELEASE'
+    }
+    repositories {
+        // 의존 패키지를 가져오는 저장소를 나열함
+        // npm 같은 곳으로 mavenCentral 을 주로 사용했지만,
+        // 패키지 공유난이도가 높아 최근 jcenter 에 많은 패키지가 업로드 되고 있다
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
 }
+
+// 앞서 선언한 플러그인 의존 패키지를 적용할 것인지 결정하는 코드.....라고 하는대 잘 이해가 되지 않음
+// 아래 4개의 java, eclipse, org.springframework.boot, io.spring.dependency-management 는
+// 자바, 스프링 부트를 상요하기 위한 필수 플러그인으로 꼭 작성하도록 한다
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management' // 스프링부트의 의존 패키지를 관리하는 플러그인으로, 꼭 필수 추가
+
 
 group 'com.springboot.book'
 version '1.0-SNAPSHOT'
+sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    // 우측 끝에는 버전정보를 담지만, 최상단에서 버전정보를 한번에 관리하고 있음으로 이곳에서는 생략 -> 이방식으로 하면 버전관리용이, 버전충돌을 예방
+    compile('org.springframework.boot:spring-boot-starter-web')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
 }
